@@ -1,9 +1,13 @@
-#CCD File preparation
-#2010-2015
-#Variable extraction for all years
-#Jose M Hernandez
-#10/17/2016
-
+######################################
+# CCD File preparation
+# 2010-2014
+# Variable extraction for all years
+# Jose M Hernandez
+# 10/17/2016
+######################################
+# Updated 1/26/2016 JH
+# NOW INCLUDES 2014-15 School information 
+######################################
 rm(list=ls())
 #install.packages('readr')
 library(readr)
@@ -123,7 +127,7 @@ ccd_2010_15$urban[is.na(ccd_2010_15$urban)] <- "missing"
 table(ccd_2010_15$urban)
 ###################################################################################################################
 ## Adapt Stata file to locate names to flag as "not a school" created by Thiago and Patrick for City Indicators Work 
-## file lives in AWS: "Project\CRPE\projects\arnold\data\_ccd/attach_ccd_demographics_2015-03-31.do"
+## file lives in AWS: "Project\CRPE\projects\arnold\data\_ccd\attach_ccd_demographics_2015-03-31.do"
 ####################################################################################################################
 ccd_2010_15$notschool <- tolower(ccd_2010_15$schnam)
 # online home schools 

@@ -320,9 +320,10 @@ mdata <- data.table(mdata, key="year")
 mdata[,subject.std:=scale(subject),by=year]
 
 data1 <- mdata[which(mdata$city.new==city[1]),]
-
-equation <- subject.std ~ as.factor(time) + propfrl + propwhite + propblack + prophisp + propasian + factor(level) + enroll
-
+#Used this as a way to compare the fixed effects vs the lmer spec
+#equation <- subject.std ~ as.factor(time) + propfrl + propwhite + propblack + prophisp + propasian + factor(level) + enroll
+#use 
+equation <- subject.std ~ time + propfrl + propwhite + propblack + prophisp + propasian + factor(level) + enroll
 lm1 <- lm(equation, data=data1)
 
 se1 <- cluster.se(lm1, data1$seasch)
@@ -333,7 +334,7 @@ p1.adj <- se1[[1]][2,4]
 
 
 
-gains.b.adj <- c(b1.adj) #beta for year 
+gains.b.adj <- c(b1.adj) #beta for year must multiply by years to get MU result
 gains.p.adj <- c(p1.adj) #p-value
 
 gains <- data.frame(cbind(city,gains.b.adj,gains.p.adj))
@@ -347,16 +348,15 @@ write.csv(gains, file="C:/Users/jhernandez/Google Drive/CityMetrics/New Jersey/g
 #fixed effects specification lme with time random effects (skip for now but needed to create caterpillar plots...)
 
 #lme
-MLexamp.6 <- lmer(subject.std ~ time + propfrl + propwhite + propblack + prophisp + propasian + factor(level) + enroll + (1 | seasch), data = data1)
-display(MLexamp.6)
-
+#MLexamp.6 <- lmer(subject.std ~ time + propfrl + propwhite + propblack + prophisp + propasian + factor(level) + enroll + (1 | seasch), data = data1)
+#display(MLexamp.6)
 fm06 <- lmer(subject.std ~ time + propfrl + propwhite + propblack + prophisp + propasian + factor(level) + enroll + (1 + time|seasch), data1,REML=FALSE)
 display(fm06)
 summary(fm06)
 head(ranef(fm06)[["seasch"]])
 ####
-model.b <- lmer(subject.std ~ time + (1 + time|seasch), data1,REML=FALSE)
-display(model.b)
+#model.b <- lmer(subject.std ~ time + (1 + time|seasch), data1,REML=FALSE)
+#display(model.b)
 #########
 
 ####################################################################
